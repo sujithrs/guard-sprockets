@@ -3,12 +3,15 @@ require 'guard/guard'
 require 'erb'
 
 require 'sprockets'
+require 'handlebars_assets'
 
 module Guard
   class Sprockets < Guard
     def initialize(watchers=[], options={})
       super 
       
+      ::Sprockets.register_engine '.hbs', HandlebarsAssets::TiltHandlebars
+
       # init Sprocket env for use later
       @sprockets_env = ::Sprockets::Environment.new
       

@@ -1,6 +1,6 @@
 # encoding: utf-8
 module Guard
-  module Sprockets
+  module SprocketsVersion
     VERSION = '0.2.0'
   end
 end
