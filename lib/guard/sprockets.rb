@@ -30,10 +30,11 @@ module Guard
        UI.info " -- external asset paths = [#{@asset_paths.inspect}]" unless @asset_paths.empty?
        UI.info " -- destination path = [#{@destination.inspect}]"
        UI.info "Sprockets is ready and waiting for some file changes..."
+       run_all if options[:all_on_start]
     end
     
     def run_all
-      true
+      run_on_change(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.hbs')))
     end
 
     def run_on_change(paths)
@@ -49,9 +50,7 @@ module Guard
       @sprockets_env.append_path changed.dirname
 
       output_basename = changed.basename.to_s
-      if match = output_basename.match(/^(.*\.(?:js|css))\.[^.]+$/)
-        output_basename = match[1]
-      end
+      output_basename = output_basename.split('.')[0..1].join('.')
 
       output_file = Pathname.new(File.join(@destination, output_basename))
       UI.info "Sprockets started compiling #{output_file}"
@@ -59,6 +58,7 @@ module Guard
       output_file.open('w') do |f|
         f.write @sprockets_env[output_basename]
       end
+      UI.info " logical assets paths = [#{@sprockets_env[output_basename].logical_path.inspect}]" 
       UI.info "Sprockets finished compiling #{output_file}"
     end
   end
