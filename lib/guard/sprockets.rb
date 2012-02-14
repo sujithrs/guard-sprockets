@@ -46,19 +46,20 @@ module Guard
     
     def sprocketize(path)
       changed = Pathname.new(path)
+      UI.info "Path is #{path}"
 
-      @sprockets_env.append_path changed.dirname
+      #@sprockets_env.append_path changed.dirname
 
       output_basename = changed.basename.to_s
       output_basename = output_basename.split('.')[0..1].join('.')
+      asset_name = "templates/#{output_basename}"
 
       output_file = Pathname.new(File.join(@destination, output_basename))
       UI.info "Sprockets started compiling #{output_file}"
       FileUtils.mkdir_p(output_file.parent) unless output_file.parent.exist?
       output_file.open('w') do |f|
-        f.write @sprockets_env[output_basename]
+        f.write @sprockets_env[asset_name]
       end
-      UI.info " logical assets paths = [#{@sprockets_env[output_basename].logical_path.inspect}]" 
       UI.info "Sprockets finished compiling #{output_file}"
     end
   end
