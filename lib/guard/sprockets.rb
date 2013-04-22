@@ -49,8 +49,13 @@ module Guard
        run_all
     end
 
+    def files
+      Watcher.match_files self, Dir['**/*']
+    end
+
     def run_all
-      run_on_changes []
+      UI.debug "run_all: #{files}"
+      run_on_changes files
     end
 
     def run_on_changes(paths)
