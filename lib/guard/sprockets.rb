@@ -89,7 +89,7 @@ module Guard
     end
 
     def without_preprocessor_extension(filename)
-      filename.gsub(/^(.*\.(?:js|css))\.[^.]+$/, '\1')
+      filename.gsub(/^(.*\.(?:js|css))\..+$/, '\1')
     end
   end
 end
